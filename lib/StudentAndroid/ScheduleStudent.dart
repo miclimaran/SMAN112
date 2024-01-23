@@ -42,7 +42,7 @@ class _ScheduleStudentPageState extends State<ScheduleStudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Teacher Schedule'),
+        title: Text('Student Schedule'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

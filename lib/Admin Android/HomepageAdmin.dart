@@ -4,6 +4,7 @@ import 'package:sekolah_app/Admin%20Android/ClassroomAdmin.dart';
 import 'package:sekolah_app/Admin%20Android/CreateAnnoucement.dart';
 import 'package:sekolah_app/Admin%20Android/FeedbackAdmin.dart';
 import 'package:sekolah_app/Admin%20Android/ProfileAdmin.dart';
+import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 
 
 void main() {
@@ -42,7 +43,9 @@ class HomepageAdminTop extends StatelessWidget {
 }
 
 class HomepageAdmin extends StatelessWidget {
-  final String username = "Jeffrey";
+  // final String emailName = ModalRoute.of(context)!.settings.arguments;
+
+  final String username = 'Irwan';
   final String imageUrl = "images/Profile.png";
 
   final List<String> imageList = [

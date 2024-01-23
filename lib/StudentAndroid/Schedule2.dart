@@ -106,7 +106,7 @@ class Schedule2 extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue, // Change color to match your color palette
                           ),
-                          child: Text('Take Attendance',style:TextStyle(color: Colors.white,)),
+                          child: Text('See Attendance',style:TextStyle(color: Colors.white,)),
                         ),
                       ],
                     ),

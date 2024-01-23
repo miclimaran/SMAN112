@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "186412446931",
+    "firebase_url": "https://sekolah-app-sman112-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sekolah-app-sman112",
+    "storage_bucket": "sekolah-app-sman112.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186412446931:android:40f2203e5c63937a369026",
+        "android_client_info": {
+          "package_name": "com.example.sekolah_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "186412446931-4hvgcj1eb1aqaj5m3de20dm92qoebik0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sekolah_app",
+            "certificate_hash": "ac08c9271d595cf3cd05db4baa6d403faf5c9852"
+          }
+        },
+        {
+          "client_id": "186412446931-ek6qtn3jkegupoa2eldjvfq5ovvui9lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKykmNJVXcGEu99aYRjXk3L2Vj2qkJjnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "186412446931-ek6qtn3jkegupoa2eldjvfq5ovvui9lf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "186412446931-283a9imef7u075j83v99v1nfgjsbsqar.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sekolahApp.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186412446931:android:1e1f8bd6ca5dbe54369026",
+        "android_client_info": {
+          "package_name": "com.example.sman_112"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "186412446931-ek6qtn3jkegupoa2eldjvfq5ovvui9lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKykmNJVXcGEu99aYRjXk3L2Vj2qkJjnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "186412446931-ek6qtn3jkegupoa2eldjvfq5ovvui9lf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "186412446931-283a9imef7u075j83v99v1nfgjsbsqar.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sekolahApp.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

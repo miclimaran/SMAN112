@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 import 'package:sekolah_app/Teacher%20Android/HomepageTeacher.dart';
 import 'package:sekolah_app/Teacher%20Android/MyAccountTeacher.dart';
+import 'package:sekolah_app/UserAuth/firebase_auth_services.dart';
 
 void main() {
   runApp(ProfileTeacher());
@@ -86,10 +88,12 @@ class ProfileContent extends StatelessWidget {
           ),
           ElevatedButton.icon(
             onPressed: () {
+              FirebaseAuth.instance.signOut();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
+              showToast(message: "Successfully signed out");
               print('Log Out');
             },
             icon: Icon(Icons.logout),

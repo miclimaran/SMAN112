@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date and time formatting
 import 'package:carousel_slider/carousel_slider.dart'; // Import carousel_slider package
+import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 import 'package:sekolah_app/StudentAndroid/NotificationStudent.dart';
 import 'package:sekolah_app/StudentAndroid/ProfileStudent.dart';
 import 'package:sekolah_app/StudentAndroid/ScheduleStudent.dart';
 import 'Schedule2.dart';
+import 'package:sekolah_app/Model/UserRepo.dart';
 
 void main() {
   runApp(Homepage2Top());
 }
 
 class Homepage2Top extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,6 +59,8 @@ class Homepage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
 return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

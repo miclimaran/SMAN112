@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>186412446931-283a9imef7u075j83v99v1nfgjsbsqar.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.186412446931-283a9imef7u075j83v99v1nfgjsbsqar</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCF5cQt74am1h-_zs1RDANAUm4mO3EkWf4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>186412446931</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.sekolahApp.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>sekolah-app-sman112</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sekolah-app-sman112.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:186412446931:ios:4e45e07204bb5ad7369026</string>
+	<key>DATABASE_URL</key>
+	<string>https://sekolah-app-sman112-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
