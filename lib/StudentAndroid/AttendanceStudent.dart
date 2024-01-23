@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sekolah_app/Model/UserRepo.dart';
+import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 
 void main() {
   runApp(AttendanceStudentTop());
@@ -20,8 +22,9 @@ class AttendanceStudentTop extends StatelessWidget {
     );
   }
 }
-
 class AttendanceStudent extends StatelessWidget {
+  UserData user = UserData();
+  UserRepo userRepo = UserRepo();
   final String username = "Michael";
   final String imageUrl = "images/Profile.png";
 
@@ -32,8 +35,36 @@ class AttendanceStudent extends StatelessWidget {
     {'time': '03.00 PM', 'lecture': 'Indonesian'},
   ];
 
+  String getFormattedDate() {
+    DateTime now = DateTime.now();
+    String formattedDate = "${now.day}-${now.month}-${now.year}";
+    return formattedDate;
+  }
+
+  String getFormattedDay() {
+    DateTime now = DateTime.now();
+    List<String> days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    int dayIndex = now.weekday - 1;
+    return days[dayIndex];
+  }
+
   @override
   Widget build(BuildContext context) {
+    String userEmail = user.email;
+    String DateFor = DateFormat('d-M-y').format(DateTime.now());
+    String attendance = ""; // Declare attendance here
+
+print(userEmail);
+print(DateFor);
+print(attendance);
+
+    Future<void> fetchData() async {
+      attendance = await userRepo.getAttendance(DateFor, userEmail);
+    }
+
+    fetchData(); 
+    print(attendance);
+
     return Scaffold(
       appBar: AppBar(title: Text('Absen Page')),
       body: Container(
@@ -41,9 +72,9 @@ class AttendanceStudent extends StatelessWidget {
           color: Colors.blue,
           borderRadius: BorderRadius.circular(10.0),
         ),
-        margin: EdgeInsets.all(50.0), // Adjust margin
+        margin: EdgeInsets.all(50.0),
         child: Padding(
-          padding: EdgeInsets.all(20.0), // Adjust padding
+          padding: EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,30 +101,18 @@ class AttendanceStudent extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Image.asset(
-                      'images/Map.png',
-                      width: 300, // Adjust image size
-                      height: 300, // Adjust image size
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print('Absen button pressed');
-                        },
-                        child: Text('Absen'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                    ),
+
+
+                    Text(
+  attendance == "Masuk"
+    ? "Attendance Complete !!"
+    : "Attendance Not Yet Completed !! Please Check with your homeroom teacher !!",
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+),
                   ],
                 ),
               ),
