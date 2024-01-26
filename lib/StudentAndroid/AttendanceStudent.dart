@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sekolah_app/Model/DataUser.dart';
 import 'package:sekolah_app/Model/UserRepo.dart';
 import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 
@@ -22,11 +23,18 @@ class AttendanceStudentTop extends StatelessWidget {
     );
   }
 }
-class AttendanceStudent extends StatelessWidget {
-  UserData user = UserData();
+
+class AttendanceStudent extends StatefulWidget {
+  @override
+  _AttendanceStudentState createState() => _AttendanceStudentState();
+}
+
+class _AttendanceStudentState extends State<AttendanceStudent> {
+  String userEmail = DataUser().email;
   UserRepo userRepo = UserRepo();
   final String username = "Michael";
   final String imageUrl = "images/Profile.png";
+  String attendance = "";
 
   final List<Map<String, String>> lectureSchedule = [
     {'time': '08:00 AM', 'lecture': 'Mathematics'},
@@ -48,23 +56,21 @@ class AttendanceStudent extends StatelessWidget {
     return days[dayIndex];
   }
 
+  Future<void> fetchData() async {
+    String DateFor = DateFormat('d-M-y').format(DateTime.now());
+    attendance = await userRepo.getAttendance(DateFor, userEmail);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    String userEmail = user.email;
-    String DateFor = DateFormat('d-M-y').format(DateTime.now());
-    String attendance = ""; // Declare attendance here
-
-print(userEmail);
-print(DateFor);
-print(attendance);
-
-    Future<void> fetchData() async {
-      attendance = await userRepo.getAttendance(DateFor, userEmail);
-    }
-
-    fetchData(); 
-    print(attendance);
-
+    fetchData();
     return Scaffold(
       appBar: AppBar(title: Text('Absen Page')),
       body: Container(
@@ -101,18 +107,17 @@ print(attendance);
                       ),
                     ),
                     SizedBox(height: 20),
-
-
                     Text(
-  attendance == "Masuk"
-    ? "Attendance Complete !!"
-    : "Attendance Not Yet Completed !! Please Check with your homeroom teacher !!",
-  style: TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-),
+                      attendance == "Masuk"
+                          ? "Attendance Complete !!"
+                          : "Attendance Not Yet Completed !! Please Check with your homeroom teacher !!",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),

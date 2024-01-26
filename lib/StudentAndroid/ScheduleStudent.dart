@@ -37,6 +37,7 @@ class ScheduleStudentPage extends StatefulWidget {
 
 class _ScheduleStudentPageState extends State<ScheduleStudentPage> {
   DateTime? selectedDate;
+  List<Map<String, String>> currentSchedule = [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class _ScheduleStudentPageState extends State<ScheduleStudentPage> {
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   selectedDate = selectedDay;
+                  updateCurrentSchedule(selectedDay);
                 });
               },
               calendarFormat: CalendarFormat.month,
@@ -104,17 +106,19 @@ class _ScheduleStudentPageState extends State<ScheduleStudentPage> {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final data = scheduleData[index];
-                  return ListTile(
-                    title: Text(data['time']!),
-                    subtitle: Text('${data['lecture']}'),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: scheduleData.length,
-              ),
+              child: currentSchedule.isEmpty
+                  ? Center(child: Text('No Class'))
+                  : ListView.separated(
+                      itemBuilder: (context, index) {
+                        final data = currentSchedule[index];
+                        return ListTile(
+                          title: Text(data['time']!),
+                          subtitle: Text('${data['lecture']}'),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: currentSchedule.length,
+                    ),
             ),
           ],
         ],
@@ -122,10 +126,75 @@ class _ScheduleStudentPageState extends State<ScheduleStudentPage> {
     );
   }
 
-  List<Map<String, String>> scheduleData = [
+  List<Map<String, String>> scheduleData1 = [
     {'time': '08:00 AM', 'lecture': 'Matematika'},
     {'time': '10:00 AM', 'lecture': 'Fisika'},
     {'time': '01:00 PM', 'lecture': 'Kimia'},
     {'time': '03:00 PM', 'lecture': 'Sejarah'},
   ];
+
+  List<Map<String, String>> scheduleData2 = [
+    {'time': '08:00 AM', 'lecture': 'Bahasa Indonesia'},
+    {'time': '10:00 AM', 'lecture': 'Bahasa Inggris'},
+    {'time': '01:00 PM', 'lecture': 'Fisika'},
+    {'time': '03:00 PM', 'lecture': 'Akuntansi'},
+  ];
+
+  List<Map<String, String>> scheduleData3 = [
+    {'time': '08:00 AM', 'lecture': 'Sejarah'},
+    {'time': '10:00 AM', 'lecture': 'Biologi'},
+    {'time': '01:00 PM', 'lecture': 'Fisika'},
+    {'time': '03:00 PM', 'lecture': 'Matematika'},
+  ];
+
+  List<Map<String, String>> scheduleData4 = [
+    {'time': '08:00 AM', 'lecture': 'Matematika'},
+    {'time': '10:00 AM', 'lecture': 'OR'},
+    {'time': '01:00 PM', 'lecture': 'Bahasa Mandarin'},
+    {'time': '03:00 PM', 'lecture': 'Fisika'},
+  ];
+
+  List<Map<String, String>> scheduleData5 = [
+    {'time': '08:00 AM', 'lecture': 'Geografi'},
+    {'time': '10:00 AM', 'lecture': 'Seni Musik'},
+    {'time': '01:00 PM', 'lecture': 'IT'},
+    {'time': '03:00 PM', 'lecture': 'Seni Lukis'},
+  ];
+
+  void updateCurrentSchedule(DateTime selectedDay) {
+    final dayOfWeek = selectedDay.weekday;
+
+    switch (dayOfWeek) {
+      case DateTime.monday:
+        setState(() {
+          currentSchedule = scheduleData1;
+        });
+        break;
+      case DateTime.tuesday:
+        setState(() {
+          currentSchedule = scheduleData2;
+        });
+        break;
+      case DateTime.wednesday:
+        setState(() {
+          currentSchedule = scheduleData3;
+        });
+        break;
+      case DateTime.thursday:
+        setState(() {
+          currentSchedule = scheduleData4;
+        });
+        break;
+      case DateTime.friday:
+        setState(() {
+          currentSchedule = scheduleData5;
+        });
+        break;
+      default:
+        setState(() {
+          currentSchedule = [];
+        });
+        break;
+    }
+  }
 }

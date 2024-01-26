@@ -1,170 +1,221 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sekolah_app/Model/DataUser.dart';
+import 'package:sekolah_app/Model/UserRepo.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'Announcement App',
-    home: CreateAnnouncementPage(),
-  ));
-}
-
-class CreateAnnouncementPage extends StatefulWidget {
+class AnnouncementPage extends StatefulWidget {
   @override
-  _CreateAnnouncementPageState createState() => _CreateAnnouncementPageState();
+  _AnnouncementPageState createState() => _AnnouncementPageState();
 }
 
-class _CreateAnnouncementPageState extends State<CreateAnnouncementPage> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
-  List<Map<String, dynamic>> announcements = [];
-
-  List<String> imageList = [
-    'images/Baazar.png',
-    'images/Baazar2.jpg',
-    'images/Baazar3.jpeg',
-    'images/Baazar4.png',
-  ];
-
-  List<String> titleList = [
-    'Baazar 1', // Replace with actual titles
-    'Baazar 2',
-    'Baazar 3',
-    'Baazar 4',
-    // Add more titles as needed
-  ];
-
-  List<String> descriptionList = [
-    'Description for Baazar 1',
-    'Description for Baazar 2',
-    'Description for Baazar 3',
-    'Description for Baazar 4',
-    // Add more descriptions as needed
-  ];
+class _AnnouncementPageState extends State<AnnouncementPage> {
+  UserRepo userRepo = UserRepo();
+  String selectedCategory = 'Semua';
+  String adminEmail = '';
+  String adminIds = '';
+  List<String> recipients = [];
+  TextEditingController announcementController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < imageList.length; i++) {
-      announcements.add({
-        'image': imageList[i],
-        'title': titleList[i],
-        'description': descriptionList[i],
-      });
+    // Fetch classroom names when the widget is created
+    fetchAdminID();
+  }
+
+  Future<void> fetchAdminID() async {
+    adminEmail = DataUser().email;
+    UserRepo userRepo = UserRepo();
+    String classroomList = await userRepo.getStudentIdbyEmail(adminEmail);
+    setState(() {
+      adminIds = classroomList;
+    });
+  }
+
+  Future<void> sendAnnouncement() async {
+    if (announcementController.text.isEmpty) {
+      // Show error if the announcement is not provided
+      _showErrorSnackBar('Please write the announcement!');
+      return;
     }
+
+    if ((selectedCategory == 'Guru' || selectedCategory == 'Murid') &&
+        recipients.isEmpty) {
+      // Show error if recipients are not chosen for Guru or Murid category
+      _showErrorSnackBar('Please choose recipients individually!');
+      return;
+    }
+
+    // Replace 'your_collection' with your actual Firestore collection name
+    final CollectionReference announcements =
+        FirebaseFirestore.instance.collection('Announcement');
+
+    // Simulated adminId, replace with actual admin ID
+    String adminId = adminIds;
+
+    // Prepare data to be sent to Firestore
+    Map<String, dynamic> data = {
+      'adminId': adminId,
+      'announcement': announcementController.text,
+      'recipient': recipients.join(', '), // Join recipients into a single string
+    };
+
+    // Add the data to Firestore
+    await announcements.add(data);
+
+    // Clear the text field after sending the announcement
+    announcementController.clear();
+    recipients.clear();
+
+    // Show a snackbar to indicate success
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Announcement Sent!'),
+      ),
+    );
+  }
+
+  Future<void> _showRecipientsDialog(BuildContext context) async {
+    // Simulated data, replace with actual data fetching logic
+    UserRepo userRepo = UserRepo();
+    List<String> allStudentName = await userRepo.getAllStudent();
+    List<String> allTeacherName = await userRepo.getAllTeacher();
+
+    List<String> allRecipients =
+        selectedCategory == 'Guru' ? allTeacherName : allStudentName;
+
+    bool isGuru = selectedCategory == 'Guru';
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Recipients'),
+          content: SingleChildScrollView(
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Column(
+                  children: [
+                    for (String recipient in allRecipients)
+                      CheckboxListTile(
+                        title: Text(recipient),
+                        value: recipients.contains(recipient),
+                        onChanged: (bool? value) {
+                          setState(() {
+                            if (value != null) {
+                              if (value) {
+                                recipients.add(recipient);
+                              } else {
+                                recipients.remove(recipient);
+                              }
+                            }
+                          });
+                        },
+                      ),
+                  ],
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (recipients.isEmpty) {
+                  // Show error if no recipients are chosen
+                  _showErrorSnackBar('Please choose at least one recipient!');
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Done'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Announcements'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              _navigateToCreateAnnouncement();
-            },
-          ),
-        ],
+        title: Text('Create Announcement'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                children: _buildAnnouncementCards(),
+          children: [
+            DropdownButton<String>(
+              value: selectedCategory,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedCategory = newValue!;
+                  recipients.clear(); // Clear recipients when category changes
+                });
+              },
+              items: [
+                'Semua',
+                'Semua Guru',
+                'Semua Murid',
+                'Guru',
+                'Murid',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20),
+            if (selectedCategory == 'Guru' || selectedCategory == 'Murid') ...[
+              ElevatedButton(
+                onPressed: () {
+                  _showRecipientsDialog(context);
+                },
+                child: Text('Choose Recipients'),
               ),
+              SizedBox(height: 20),
+            ],
+            TextField(
+              controller: announcementController,
+              decoration: InputDecoration(
+                labelText: 'Announcement',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 4,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                sendAnnouncement();
+              },
+              child: Text('Send Announcement'),
             ),
           ],
         ),
       ),
     );
-  }
-
-  List<Widget> _buildAnnouncementCards() {
-    List<Widget> cards = [];
-    for (int i = 0; i < announcements.length; i++) {
-      cards.add(
-        Card(
-          margin: EdgeInsets.all(12.0), // Reduce margin to prevent overflow
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              AspectRatio(
-                aspectRatio: 1.6,
-                child: Image.asset(
-                  announcements[i]['image'],
-                ),
-              ),
-              ListTile(
-                title: Text(announcements[i]['title']),
-                subtitle: Text(announcements[i]['description']),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    return cards;
-  }
-
-  void _navigateToCreateAnnouncement() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddAnnouncementPage()),
-    );
-
-    if (result != null && result.containsKey('title') && result.containsKey('description')) {
-      setState(() {
-        announcements.add({
-          'title': result['title'],
-          'description': result['description'],
-        });
-      });
-    }
   }
 }
 
-class AddAnnouncementPage extends StatelessWidget {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Add Announcement')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(labelText: 'Title'),
-            ),
-            SizedBox(height: 12.0),
-            TextField(
-              controller: descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, {
-                  'title': titleController.text,
-                  'description': descriptionController.text,
-                });
-              },
-              child: Text('Create Announcement'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(MaterialApp(
+    home: AnnouncementPage(),
+  ));
 }

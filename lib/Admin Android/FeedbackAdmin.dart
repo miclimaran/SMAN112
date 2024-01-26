@@ -20,7 +20,7 @@ class FeedbackAdminTop extends StatelessWidget {
     },
     {
       'name': 'Charlie',
-      'image': 'images/Baazar2.png',
+      'image': 'images/Baazar.png',
       'feedback': 'Ada yang kurang dari aplikasinya.'
     },
     {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sekolah_app/Admin%20Android/ClassroomAdmin.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -12,7 +13,7 @@ class CreateNewClassPage extends StatelessWidget {
   final TextEditingController classNameController = TextEditingController();
   final TextEditingController waliKelasController = TextEditingController();
 
-  Future<void> createClass() async {
+  Future<void> createClass(BuildContext context) async {
     String className = classNameController.text.trim();
     String waliKelas = waliKelasController.text.trim();
 
@@ -31,6 +32,29 @@ class CreateNewClassPage extends StatelessWidget {
 
       classNameController.clear();
       waliKelasController.clear();
+
+      // Show a pop-up dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Class Created'),
+            content: Text('The class has been created successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // Navigate to the ClassroomAdmin page after acknowledging the dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ClassroomAdminPage()),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     } else {
       print('Please enter both class name and Teacher Id');
     }
@@ -65,7 +89,7 @@ class CreateNewClassPage extends StatelessWidget {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                createClass(); // Call the function to create a new class
+                createClass(context); // Pass the context to the function
               },
               child: Text('Create Class'),
               style: ElevatedButton.styleFrom(

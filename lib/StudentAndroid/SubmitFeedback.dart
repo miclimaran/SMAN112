@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sekolah_app/Model/DataUser.dart';
 import 'package:sekolah_app/Model/UserRepo.dart';
 import 'package:sekolah_app/StudentAndroid/Homepage2.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,28 +12,47 @@ void main() async {
   runApp(SubmitFeedback());
 }
 
+class FeedbackModel {
+  final String feedback;
+  final String teacherId;
+  final String studentId;
+  final Timestamp date;
 
+  FeedbackModel({
+    required this.feedback,
+    required this.teacherId,
+    required this.studentId,
+    required this.date,
+  });
 
+  factory FeedbackModel.fromSnapshot(DocumentSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    return FeedbackModel(
+      feedback: data['feedback'] ?? '',
+      teacherId: data['teacherId'] ?? '',
+      studentId: data['studentId'] ?? '',
+      date: data['date'] ?? DateFormat('d-m-y').format(DateTime.now()),
+    );
+  }
+}
 
 class SubmitFeedback extends StatelessWidget {
-  UserRepo userRepo = UserRepo(); // Create an instance of UserRepo
+  UserRepo userRepo = UserRepo();
   List<String> teachers = [];
+  String userEmail = DataUser().email;
+  String studentId = 'TEST';
+  String teacherId = 'TEST';
 
-  final DatabaseReference _feedbackRef = FirebaseDatabase.instance.reference().child('feedback');
-
-
+  final CollectionReference _feedbackCollection = FirebaseFirestore.instance.collection('Feedback');
 
   @override
   Widget build(BuildContext context) {
     TextEditingController _feedbackController = TextEditingController();
 
-
-      @override
+    @override
     void dispose() {
-    _feedbackController.dispose();
-  }
-
-      String feedback = _feedbackController.text;
+      _feedbackController.dispose();
+    }
 
     return FutureBuilder<List<String>>(
       future: userRepo.getTeacher(),
@@ -145,10 +165,21 @@ class SubmitFeedback extends StatelessWidget {
                             ),
                             SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () {
-                                // submitFeedback(feedback); 
-                                // Submit feedback to Firebase
-                                _showFeedbackSentDialog(context);
+                              onPressed: () async {
+                                studentId = await userRepo.getStudentIdbyEmail(userEmail);
+                                String selectedTeacher = teachers.first;
+                                teacherId = await userRepo.getTeacherIdbyName(selectedTeacher);
+                                print(studentId);
+                                print(teacherId);
+                                String feedback = _feedbackController.text.trim();
+                                
+
+                                if (feedback.isNotEmpty) {
+                                  await submitFeedbackToFirestore(feedback, teacherId, studentId);
+                                  _showFeedbackSentDialog(context);
+                                } else {
+                                  _showErrorDialog(context, 'Feedback cannot be empty.');
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.white,
@@ -170,19 +201,18 @@ class SubmitFeedback extends StatelessWidget {
     );
   }
 
-  Future<void> submitFeedback(String feedbacks, String teacherId) async {
-    // Get the feedback and selected teacher
-    String feedback = feedbacks; // Replace with the actual feedback
-    String selectedTeacher = teacherId; 
-
-    Map<String, dynamic> feedbackData = {
-      'feedback': feedback,
-      'teacher': selectedTeacher,
-      'date': ServerValue.timestamp,
-    };
-
-    // Store the data in Firebase
-    await _feedbackRef.push().set(feedbackData);
+  Future<void> submitFeedbackToFirestore(String feedback, String teacherId, String studentId) async {
+    try {
+      await _feedbackCollection.add({
+        'feedback': feedback,
+        'teacherId': teacherId,
+        'studentId': studentId,
+        'date': DateFormat('d-M-y').format(DateTime.now()),
+      });
+    } catch (e) {
+      print('Error submitting feedback to Firestore: $e');
+      // Handle the error as needed
+    }
   }
 
   Future<void> _showFeedbackSentDialog(BuildContext context) async {
@@ -215,6 +245,44 @@ class SubmitFeedback extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => Homepage2()),
                     );
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Icon(Icons.error, color: Colors.red, size: 60),
+                SizedBox(height: 20),
+                Text(
+                  'Error!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
                   },
                   child: Text('OK'),
                 ),

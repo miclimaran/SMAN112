@@ -1,39 +1,34 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Classroom Detail Page',
-    home: ClassroomDetailPage(),
-  ));
-}
+import 'package:sekolah_app/Model/DataUser.dart';
+import 'package:sekolah_app/Model/UserRepo.dart';
 
 class ClassroomDetailPage extends StatefulWidget {
+  final String className;
+
+  ClassroomDetailPage({required this.className});
+
   @override
   _ClassroomDetailPageState createState() => _ClassroomDetailPageState();
 }
 
 class _ClassroomDetailPageState extends State<ClassroomDetailPage> {
-  List<String> studentsInClass = [
-    'Student 1',
-    'Student 2',
-    'Student 3',
-    'Student 4',
-    'Student 5',
-    'Student 6',
-    'Student 7',
-    'Student 8',
-    'Student 9',
-    'Student 10',
-    'Student 11',
-    'Student 12',
-  ];
-
+  List<String> studentsInClass = [];
   List<String> displayedStudents = [];
 
   @override
   void initState() {
     super.initState();
-    displayedStudents.addAll(studentsInClass);
+    fetchStudentClasses();
+  }
+
+  Future<void> fetchStudentClasses() async {
+    UserRepo userRepo = UserRepo();
+    List<String> studentClasses =
+        await userRepo.getStudentForClass(widget.className);
+    setState(() {
+      studentsInClass = studentClasses;
+      displayedStudents = studentsInClass;
+    });
   }
 
   void filterStudents(String query) {
@@ -57,9 +52,11 @@ class _ClassroomDetailPageState extends State<ClassroomDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    String classroomName = DataUser().adminClassName;
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classroom Detail'),
+        title: Text('Classroom Detail ($classroomName)'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,11 +80,11 @@ class _ClassroomDetailPageState extends State<ClassroomDetailPage> {
                     onTap: () =>
                         viewStudentDetails(displayedStudents[index]),
                     child: Card(
-                      color: Color(0xFF3D73EB), // Background color as blue
+                      color: Color(0xFF3D73EB),
                       child: ListTile(
                         title: Text(
                           displayedStudents[index],
-                          style: TextStyle(color: Colors.white), // Text color as white
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -102,10 +99,45 @@ class _ClassroomDetailPageState extends State<ClassroomDetailPage> {
   }
 }
 
-class StudentDetailsPage extends StatelessWidget {
+
+
+class StudentDetailsPage extends StatefulWidget {
   final String studentName;
 
   const StudentDetailsPage({required this.studentName});
+
+  @override
+  _StudentDetailsPageState createState() => _StudentDetailsPageState();
+}
+
+class _StudentDetailsPageState extends State<StudentDetailsPage> {
+  List<String> detailStudent = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentDetails();
+  }
+
+  Future<void> fetchStudentDetails() async {
+    // Simulating the data fetching process
+    // Replace this with the actual logic to fetch student details
+    UserRepo userRepo = UserRepo();
+    List<String> studentDetails = await userRepo.getAllStudentDetails(widget.studentName);
+
+    // Simulated data
+    // List<String> studentDetails = [
+    //   'Name: Michael Limaran',
+    //   'Email: Michael.limaran@student.ac.id',
+    //   'Role: Student',
+    //   'ID: STD001',
+    //   'Class: XA1',
+    // ];
+
+    setState(() {
+      detailStudent = studentDetails;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +145,27 @@ class StudentDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Student Details'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(
-            'Student Details for $studentName',
-            style: TextStyle(fontSize: 20.0),
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var detail in detailStudent)
+              Card(
+                elevation: 4.0,
+                margin: EdgeInsets.only(bottom: 12.0),
+                child: ListTile(
+                  leading: Icon(
+                    Icons.person,
+                    color: Colors.blue,
+                  ),
+                  title: Text(
+                    detail,
+                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

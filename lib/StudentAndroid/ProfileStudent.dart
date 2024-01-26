@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sekolah_app/Admin%20Android/MyAccountAdmin.dart';
 import 'package:sekolah_app/StudentAndroid/Homepage2.dart';
 import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
+import 'package:sekolah_app/StudentAndroid/MyAccountStudent.dart';
 import 'package:sekolah_app/UserAuth/firebase_auth_services.dart';
 
 void main() {
@@ -67,7 +69,7 @@ class ProfileStudentContent extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton.icon(
             onPressed: () {
-              
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountStudent()));
               print('Navigate to My Account');
             },
             icon: Icon(Icons.account_circle),
@@ -77,7 +79,6 @@ class ProfileStudentContent extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {
               // TODO: Navigate to About App screen
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => AboutAppScreen()));
               // Replace the above line with navigation to your About App screen
               print('Navigate to About App');
             },

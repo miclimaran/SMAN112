@@ -148,7 +148,7 @@ return Scaffold(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CreateAnnouncementPage()),
+                      MaterialPageRoute(builder: (context) => AnnouncementPage()),
                     );
                   },
                   icon: Image.asset('images/AnnoucementButtonWhite.png'), // Replace with your profile icon asset

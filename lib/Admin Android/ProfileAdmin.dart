@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sekolah_app/Admin%20Android/HomepageAdmin.dart';
 import 'package:sekolah_app/Admin%20Android/MyAccountAdmin.dart';
+import 'package:sekolah_app/Model/UserRepo.dart';
 import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 import 'package:sekolah_app/Teacher%20Android/HomepageTeacher.dart';
 import 'package:sekolah_app/Teacher%20Android/MyAccountTeacher.dart';
 import 'package:sekolah_app/UserAuth/firebase_auth_services.dart';
+import 'package:sekolah_app/Model/DataUser.dart';
 
 void main() {
   runApp(ProfileAdmin());
@@ -13,6 +16,10 @@ void main() {
 class ProfileAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
+
+    
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -22,7 +29,7 @@ class ProfileAdmin extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomepageTeacher()),
+                MaterialPageRoute(builder: (context) => HomepageAdmin()),
               );
             },
           ),
@@ -33,9 +40,47 @@ class ProfileAdmin extends StatelessWidget {
   }
 }
 
-class ProfileContentAdmin extends StatelessWidget {
+class ProfileContentAdmin extends StatefulWidget {
+  @override
+  _ProfileContentAdminState createState() => _ProfileContentAdminState();
+}
+
+
+
+class _ProfileContentAdminState extends State<ProfileContentAdmin> {
+
+  String Email = DataUser().email;
+  String AdminName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentDetails();
+  }
+
+  Future<void> fetchStudentDetails() async {
+    // Simulating the data fetching process
+    // Replace this with the actual logic to fetch student details
+    UserRepo userRepo = UserRepo();
+    String studentDetails = await userRepo.getAdminNamebyEmail(Email);
+
+    // Simulated data
+    // List<String> studentDetails = [
+    //   'Name: Michael Limaran',
+    //   'Email: Michael.limaran@student.ac.id',
+    //   'Role: Student',
+    //   'ID: STD001',
+    //   'Class: XA1',
+    // ];
+
+    setState(() {
+      AdminName = studentDetails;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
+fetchStudentDetails();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -54,7 +99,7 @@ class ProfileContentAdmin extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Jeffrey', // Replace with actual teacher's name
+                    AdminName, // Replace with actual teacher's name
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   SizedBox(height: 8),
@@ -70,9 +115,9 @@ class ProfileContentAdmin extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () {
               Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyAccountAdmin()),
-                    );
+                context,
+                MaterialPageRoute(builder: (context) => MyAccountAdmin()),
+              );
               print('Navigate to My Account');
             },
             icon: Icon(Icons.account_circle),
