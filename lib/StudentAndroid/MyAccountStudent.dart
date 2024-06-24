@@ -33,28 +33,33 @@ class MyAccountScreenStudent extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage('assets/profile_image.png'), // Replace with user's profile image
+                    radius: 70,
+                    backgroundImage: AssetImage(
+                        'images/Profile.png'), // Replace with user's profile image
                   ),
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Functionality to change profile picture
-                      // Implement your logic here
-                    },
-                    child: Text('Change Profile Picture'),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // Functionality to change profile picture
+                  //     // Implement your logic here
+                  //   },
+                  //   child: Text('Change Profile Picture'),
+                  // ),
                 ],
               ),
             ),
             SizedBox(height: 20),
-            buildTextField('Username', 'JohnDoe'), // Replace with user data
+            buildTextField(
+                'Username', 'Michael Limaran'), // Replace with user data
             buildTextField('Role', 'Student'), // Replace with user data
-            buildTextField('Wali Kelas', '10A'), // Replace with user data
-            buildTextField('Email', 'johndoe@example.com'), // Replace with user data
-            buildTextField('Phone Number', '123-456-7890'), // Replace with user data
+            buildTextField('Wali Kelas', 'XII IPA 2'), // Replace with user data
+            buildTextField('Email',
+                'Michael.limaran@student.ac.id'), // Replace with user data
+            buildTextField(
+                'Phone Number', '08123456789'), // Replace with user data
             buildTextField('Gender', 'Male'), // Replace with user data
-            buildTextField('Date of Birth', 'January 1, 1990'), // Replace with user data
+            buildTextField(
+                'Date of Birth', 'January 1, 2000'), // Replace with user data
           ],
         ),
       ),

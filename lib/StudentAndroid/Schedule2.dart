@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date and time formatting
-import 'SubmitFeedback.dart';
+// import 'SubmitFeedback.dart';
 import 'AttendanceStudent.dart';
 
 void main() {
@@ -20,8 +20,8 @@ class Schedule2Top extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (_) => Schedule2());
-          case '/SubmitFeedback':
-            return MaterialPageRoute(builder: (_) => SubmitFeedback());
+          // case '/SubmitFeedback':
+          //   return MaterialPageRoute(builder: (_) => SubmitFeedback());
           case '/AttendanceStudent':
             return MaterialPageRoute(builder: (_) => AttendanceStudent());
           // Add more cases for other routes if needed
@@ -70,13 +70,20 @@ class Schedule2 extends StatelessWidget {
                     SizedBox(height: 20),
                     DataTable(
                       columns: [
-                        DataColumn(label: Expanded(child: Center(child: Text('Time')))),
-                        DataColumn(label: Expanded(child: Center(child: Text('Lecture')))),
+                        DataColumn(
+                            label:
+                                Expanded(child: Center(child: Text('Time')))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Center(child: Text('Lecture')))),
                       ],
                       rows: lectureSchedule.map((schedule) {
                         return DataRow(cells: [
-                          DataCell(Expanded(child: Center(child: Text(schedule['time']!)))),
-                          DataCell(Expanded(child: Center(child: Text(schedule['lecture']!)))),
+                          DataCell(Expanded(
+                              child: Center(child: Text(schedule['time']!)))),
+                          DataCell(Expanded(
+                              child:
+                                  Center(child: Text(schedule['lecture']!)))),
                         ]);
                       }).toList(),
                     ),
@@ -84,29 +91,39 @@ class Schedule2 extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        // ElevatedButton(
+                        //   onPressed: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => SubmitFeedback()),
+                        //     );
+                        //   },
+                        //   style: ElevatedButton.styleFrom(
+                        //     primary: Colors
+                        //         .blue, // Change color to match your color palette
+                        //   ),
+                        //   child: Text('Submit Feedback',
+                        //       style: TextStyle(
+                        //         color: Colors.white,
+                        //       )),
+                        // ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SubmitFeedback()),
-                    );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AttendanceStudent()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue, // Change color to match your color palette
+                            backgroundColor: Colors
+                                .blue, // Change color to match your color palette
                           ),
-                          child: Text('Submit Feedback',style:TextStyle(color: Colors.white,)),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                          Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AttendanceStudent()),
-                    );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue, // Change color to match your color palette
-                          ),
-                          child: Text('See Attendance',style:TextStyle(color: Colors.white,)),
+                          child: Text('See Attendance',
+                              style: TextStyle(
+                                color: Colors.white,
+                              )),
                         ),
                       ],
                     ),

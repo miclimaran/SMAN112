@@ -6,7 +6,6 @@ import 'package:sekolah_app/Admin%20Android/FeedbackAdmin.dart';
 import 'package:sekolah_app/Admin%20Android/ProfileAdmin.dart';
 import 'package:sekolah_app/StudentAndroid/LogInPage.dart';
 
-
 void main() {
   runApp(HomepageAdminTop());
 }
@@ -57,7 +56,7 @@ class HomepageAdmin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
+    return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -78,7 +77,6 @@ return Scaffold(
             ),
           ),
           SizedBox(height: 10),
-          
           Expanded(
             child: CarouselSlider(
               options: CarouselOptions(
@@ -113,10 +111,10 @@ return Scaffold(
           SizedBox(height: 20),
           Container(
             padding: EdgeInsets.all(10),
-             decoration: BoxDecoration(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Color(0xFF3D73EB),
-             ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -124,35 +122,38 @@ return Scaffold(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ClassroomAdminPage()),
+                      MaterialPageRoute(
+                          builder: (context) => ClassroomAdminPage()),
                     );
                   },
-                  icon: Image.asset('images/ClassroomButtonWhite.png'), // Replace with your home icon asset
+                  icon: Image.asset(
+                      'images/ClassroomButtonWhite.png'), // Replace with your home icon asset
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FeedbackAdminTop()),
-                    );
-                  },
-                  icon: Image.asset('images/FeedbackWhite.png'), // Replace with your schedule icon asset
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => FeedbackAdminTop()),
+                //     );
+                //   },
+                //   icon: Image.asset('images/FeedbackWhite.png'), // Replace with your schedule icon asset
+                // ),
                 IconButton(
                   onPressed: () {
                     // Action for notification button
                   },
-                  icon: Image.asset('images/BigHomeWhite.png'), // Replace with your notification icon asset
+                  icon: Image.asset(
+                      'images/BigHomeWhite.png'), // Replace with your notification icon asset
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AnnouncementPage()),
-                    );
-                  },
-                  icon: Image.asset('images/AnnoucementButtonWhite.png'), // Replace with your profile icon asset
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => AnnouncementPage()),
+                //     );
+                //   },
+                //   icon: Image.asset('images/AnnoucementButtonWhite.png'), // Replace with your profile icon asset
+                // ),
                 IconButton(
                   onPressed: () {
                     Navigator.push(
@@ -160,7 +161,8 @@ return Scaffold(
                       MaterialPageRoute(builder: (context) => ProfileAdmin()),
                     );
                   },
-                  icon: Image.asset('images/ProfileButtonWhite.png'), // Replace with your profile icon asset
+                  icon: Image.asset(
+                      'images/ProfileButtonWhite.png'), // Replace with your profile icon asset
                 ),
               ],
             ),

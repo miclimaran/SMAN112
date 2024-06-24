@@ -51,7 +51,15 @@ class _AttendanceStudentState extends State<AttendanceStudent> {
 
   String getFormattedDay() {
     DateTime now = DateTime.now();
-    List<String> days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    List<String> days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
     int dayIndex = now.weekday - 1;
     return days[dayIndex];
   }
